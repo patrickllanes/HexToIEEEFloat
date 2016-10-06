@@ -7,11 +7,38 @@
  Description : Hello World in C, Ansi-style
  ============================================================================
  */
-
 #include <stdio.h>
-#include <stdlib.h>
+#include <math.h>
+#include "HexToIEEEFloat.h"
 
-int main(void) {
-	puts("!!!Hello World!!!"); /* prints !!!Hello World!!! */
-	return EXIT_SUCCESS;
+#define CHECK_BIT(var, pos)		(var & (1 << pos))
+
+IEEEFloat new_float;
+
+double hexToIEEEFloat(uint32_t value) {
+
+	double new_value = 1;
+	uint8_t power_index = 1;
+
+	/* Store value into struct */
+	new_float.value = value;
+
+	/* Add Fractional Part */
+	for (int i = 22; i >= 0; i--) {
+
+		if (CHECK_BIT(new_float.mantissa, i)) {
+			new_value += pow(2.0, -power_index);
+		}
+
+		power_index++;
+	}
+
+	/* Multiply exponential */
+	new_value *= pow(2.0, new_float.exponent-127);
+
+	/* Return negative value is sign bit is 1 */
+	if(new_float.sign)
+		return -new_value;
+	else
+		return new_value;
 }
