@@ -36,6 +36,6 @@ double hexToIEEEFloat(uint32_t value) {
 	/* Multiply exponential */
 	new_value *= pow(2.0, new_float.exponent-127);
 
-	/* Return negative value is sign bit is 1 */
+	/* Return negative value if sign bit is 1 */
 	return new_float.sign ? -new_value : new_value;
 }
